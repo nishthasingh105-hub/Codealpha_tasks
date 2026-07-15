@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Responsive Image Gallery</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Image Gallery</h1>
+
+    <div class="controls">
+      <div class="filter-buttons" role="tablist" aria-label="Image categories">
+        <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter-btn" data-filter="nature">Nature</button>
+        <button class="filter-btn" data-filter="architecture">Architecture</button>
+        <button class="filter-btn" data-filter="people">People</button>
+      </div>
+    </div>
+
+    <section id="gallery" class="gallery" aria-label="Image gallery">
+      <!-- Each figure has data-category and data-index -->
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="https://picsum.photos/seed/nature1/600/400" alt="Nature 1" loading="lazy">
+        <figcaption>Nature 1</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="architecture" tabindex="0">
+        <img src="https://picsum.photos/seed/arch1/600/400" alt="Architecture 1" loading="lazy">
+        <figcaption>Architecture 1</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="people" tabindex="0">
+        <img src="https://picsum.photos/seed/people1/600/400" alt="People 1" loading="lazy">
+        <figcaption>People 1</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="https://picsum.photos/seed/nature2/600/400" alt="Nature 2" loading="lazy">
+        <figcaption>Nature 2</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="architecture" tabindex="0">
+        <img src="https://picsum.photos/seed/arch2/600/400" alt="Architecture 2" loading="lazy">
+        <figcaption>Architecture 2</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="people" tabindex="0">
+        <img src="https://picsum.photos/seed/people2/600/400" alt="People 2" loading="lazy">
+        <figcaption>People 2</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="https://picsum.photos/seed/nature3/600/400" alt="Nature 3" loading="lazy">
+        <figcaption>Nature 3</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="architecture" tabindex="0">
+        <img src="https://picsum.photos/seed/arch3/600/400" alt="Architecture 3" loading="lazy">
+        <figcaption>Architecture 3</figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-category="people" tabindex="0">
+        <img src="https://picsum.photos/seed/people3/600/400" alt="People 3" loading="lazy">
+        <figcaption>People 3</figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <!-- Lightbox / modal -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <button id="lb-close" class="lb-close" aria-label="Close (Esc)">&times;</button>
+    <button id="lb-prev" class="lb-nav lb-prev" aria-label="Previous image">&#10094;</button>
+    <div class="lb-content">
+      <img id="lb-image" src="" alt="">
+      <p id="lb-caption" class="lb-caption"></p>
+    </div>
+    <button id="lb-next" class="lb-nav lb-next" aria-label="Next image">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

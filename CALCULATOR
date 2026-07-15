@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --case-1: #3b3b40;
+    --case-2: #1e1e22;
+    --case-edge: #121214;
+    --bezel: #0c0f0c;
+    --screen-bg-1: #101a0c;
+    --screen-bg-2: #070a06;
+    --amber: #ffb545;
+    --amber-dim: #d98a2b;
+    --amber-glow: rgba(255, 181, 69, 0.55);
+    --key-num: #edeae3;
+    --key-num-text: #232323;
+    --key-num-active: #d5d2ca;
+    --key-func: #55565d;
+    --key-func-text: #f5f3ee;
+    --key-func-active: #43444a;
+    --key-op: #ff8a3d;
+    --key-op-text: #221200;
+    --key-op-active: #e5762b;
+    --key-eq: #e0432b;
+    --key-eq-text: #fff6f0;
+    --key-eq-active: #c33520;
+    --led-ok: #57ff8a;
+    --led-err: #ff4d4d;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 50% 20%, #2a2a2e 0%, #17171a 55%, #101012 100%);
+    font-family:'Inter', sans-serif;
+    padding: 24px;
+  }
+
+  .calculator{
+    width: 100%;
+    max-width: 360px;
+    background: linear-gradient(160deg, var(--case-1), var(--case-2));
+    border-radius: 28px;
+    padding: 20px 18px 24px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 -30px 60px rgba(0,0,0,0.35) inset,
+      0 30px 60px rgba(0,0,0,0.55),
+      0 3px 0 var(--case-edge);
+    position: relative;
+  }
+
+  .brand-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 2px 8px 12px;
+  }
+
+  .brand{
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: #8c8c92;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .led{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--led-ok);
+    box-shadow: 0 0 6px var(--led-ok), 0 0 2px var(--led-ok);
+    transition: background .15s ease, box-shadow .15s ease;
+  }
+  .led.led-err{
+    background: var(--led-err);
+    box-shadow: 0 0 8px var(--led-err), 0 0 3px var(--led-err);
+  }
+
+  .screen{
+    background: var(--bezel);
+    border-radius: 16px;
+    padding: 18px 18px 14px;
+    margin-bottom: 18px;
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.6) inset,
+      0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+    background-image:
+      radial-gradient(120% 100% at 50% 0%, var(--screen-bg-1), var(--screen-bg-2));
+  }
+
+  .screen::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  .history{
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--amber-dim);
+    text-align: right;
+    min-height: 1.2em;
+    text-shadow: 0 0 6px rgba(217,138,43,0.4);
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .display{
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(2.1rem, 8vw, 2.9rem);
+    letter-spacing: 0.03em;
+    color: var(--amber);
+    text-align: right;
+    text-shadow: 0 0 10px var(--amber-glow), 0 0 22px var(--amber-glow);
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 4px 0 2px;
+    transition: text-shadow .2s ease;
+  }
+
+  .display.pulse{
+    text-shadow: 0 0 16px var(--amber-glow), 0 0 34px var(--amber-glow);
+  }
+
+  .preview{
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--amber-dim);
+    text-align: right;
+    min-height: 1.2em;
+    opacity: 0.85;
+  }
+
+  .keys{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .key{
+    border: none;
+    border-radius: 14px;
+    padding: 16px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    transition: transform .06s ease, box-shadow .06s ease, background .1s ease;
+  }
+
+  .key:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  .key-num{
+    background: var(--key-num);
+    color: var(--key-num-text);
+    box-shadow: 0 3px 0 #b9b6ae, 0 5px 8px rgba(0,0,0,0.35);
+  }
+  .key-num:active, .key-num.pressed{
+    background: var(--key-num-active);
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #b9b6ae, 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .key-func{
+    background: var(--key-func);
+    color: var(--key-func-text);
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    box-shadow: 0 3px 0 #333338, 0 5px 8px rgba(0,0,0,0.35);
+  }
+  .key-func:active, .key-func.pressed{
+    background: var(--key-func-active);
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #333338, 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .key-op{
+    background: var(--key-op);
+    color: var(--key-op-text);
+    font-size: 1.3rem;
+    box-shadow: 0 3px 0 #b85f22, 0 5px 8px rgba(0,0,0,0.35);
+  }
+  .key-op:active, .key-op.pressed{
+    background: var(--key-op-active);
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #b85f22, 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .key-eq{
+    background: var(--key-eq);
+    color: var(--key-eq-text);
+    font-size: 1.3rem;
+    box-shadow: 0 3px 0 #9c2a19, 0 5px 8px rgba(0,0,0,0.35);
+  }
+  .key-eq:active, .key-eq.pressed{
+    background: var(--key-eq-active);
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #9c2a19, 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .key-zero{ grid-column: span 2; }
+
+  @media (prefers-reduced-motion: reduce){
+    .key, .display{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="brand-row">
+      <span class="brand">Electra · Model 7X</span>
+      <span class="led" id="led"></span>
+    </div>
+
+    <div class="screen">
+      <div class="history" id="history">&nbsp;</div>
+      <div class="display" id="display" aria-live="polite">0</div>
+      <div class="preview" id="preview">&nbsp;</div>
+    </div>
+
+    <div class="keys">
+      <button class="key key-func" data-action="clear" aria-label="All clear">AC</button>
+      <button class="key key-func" data-action="delete" aria-label="Delete last digit">DEL</button>
+      <button class="key key-func" data-action="percent" aria-label="Percent">%</button>
+      <button class="key key-op" data-action="operator" data-op="÷" aria-label="Divide">÷</button>
+
+      <button class="key key-num" data-digit="7">7</button>
+      <button class="key key-num" data-digit="8">8</button>
+      <button class="key key-num" data-digit="9">9</button>
+      <button class="key key-op" data-action="operator" data-op="×" aria-label="Multiply">×</button>
+
+      <button class="key key-num" data-digit="4">4</button>
+      <button class="key key-num" data-digit="5">5</button>
+      <button class="key key-num" data-digit="6">6</button>
+      <button class="key key-op" data-action="operator" data-op="−" aria-label="Subtract">−</button>
+
+      <button class="key key-num" data-digit="1">1</button>
+      <button class="key key-num" data-digit="2">2</button>
+      <button class="key key-num" data-digit="3">3</button>
+      <button class="key key-op" data-action="operator" data-op="+" aria-label="Add">+</button>
+
+      <button class="key key-num key-zero" data-digit="0">0</button>
+      <button class="key key-num" data-action="decimal" aria-label="Decimal point">.</button>
+      <button class="key key-eq" data-action="equals" aria-label="Equals">=</button>
+    </div>
+  </div>
+
+<script>
+  const displayEl = document.getElementById('display');
+  const historyEl = document.getElementById('history');
+  const previewEl = document.getElementById('preview');
+  const ledEl = document.getElementById('led');
+
+  const state = {
+    current: '0',
+    previous: null,
+    operator: null,
+    expression: '',
+    resetNext: false,
+    errored: false
+  };
+
+  function compute(a, b, op){
+    switch(op){
+      case '+': return a + b;
+      case '−': return a - b;
+      case '×': return a * b;
+      case '÷': return b === 0 ? NaN : a / b;
+      default: return b;
+    }
+  }
+
+  function trimNumber(num){
+    if(!isFinite(num)) return 'Error';
+    const rounded = parseFloat(num.toPrecision(12));
+    return rounded.toString();
+  }
+
+  function formatForDisplay(str){
+    if(str === 'Error') return str;
+    const negative = str.startsWith('-');
+    const raw = negative ? str.slice(1) : str;
+    let [intPart, decPart] = raw.split('.');
+    intPart = intPart === '' ? '0' : intPart;
+    const withCommas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const result = withCommas + (decPart !== undefined ? '.' + decPart : '');
+    return (negative ? '-' : '') + result;
+  }
+
+  function updateView(){
+    displayEl.textContent = state.errored ? 'Error' : formatForDisplay(state.current);
+    historyEl.innerHTML = state.expression || '&nbsp;';
+
+    if(state.operator && state.previous !== null && !state.resetNext && !state.errored){
+      const b = parseFloat(state.current);
+      if(!isNaN(b)){
+        const result = compute(state.previous, b, state.operator);
+        previewEl.textContent = '= ' + (isFinite(result) ? formatForDisplay(trimNumber(result)) : 'Error');
+      } else {
+        previewEl.innerHTML = '&nbsp;';
+      }
+    } else {
+      previewEl.innerHTML = '&nbsp;';
+    }
+
+    ledEl.classList.toggle('led-err', state.errored);
+  }
+
+  function pulseDisplay(){
+    displayEl.classList.add('pulse');
+    setTimeout(() => displayEl.classList.remove('pulse'), 180);
+  }
+
+  function triggerError(){
+    state.current = 'Error';
+    state.previous = null;
+    state.operator = null;
+    state.expression = '';
+    state.resetNext = true;
+    state.errored = true;
+    updateView();
+  }
+
+  function inputDigit(d){
+    if(state.errored) clearAll();
+
+    if(state.resetNext){
+      state.current = d === '.' ? '0.' : d;
+      state.resetNext = false;
+    } else if(d === '.'){
+      if(!state.current.includes('.')) state.current += '.';
+    } else {
+      state.current = state.current === '0' ? d : state.current + d;
+    }
+
+    if(state.current.replace('-', '').replace('.', '').length > 15) return;
+    updateView();
+  }
+
+  function setOperator(op){
+    if(state.errored) return;
+    const cur = parseFloat(state.current);
+
+    if(state.operator && !state.resetNext){
+      const result = compute(state.previous, cur, state.operator);
+      if(!isFinite(result)){ triggerError(); return; }
+      state.previous = parseFloat(trimNumber(result));
+      state.expression = formatForDisplay(trimNumber(state.previous)) + ' ' + op;
+    } else {
+      state.previous = cur;
+      state.expression = formatForDisplay(trimNumber(cur)) + ' ' + op;
+    }
+
+    state.operator = op;
+    state.resetNext = true;
+    updateView();
+  }
+
+  function equals(){
+    if(state.errored || state.operator === null || state.previous === null) return;
+    const cur = parseFloat(state.current);
+    const result = compute(state.previous, cur, state.operator);
+    if(!isFinite(result)){ triggerError(); return; }
+
+    state.expression = formatForDisplay(trimNumber(state.previous)) + ' ' + state.operator + ' ' + formatForDisplay(trimNumber(cur)) + ' =';
+    state.current = trimNumber(result);
+    state.previous = null;
+    state.operator = null;
+    state.resetNext = true;
+    updateView();
+    pulseDisplay();
+  }
+
+  function clearAll(){
+    state.current = '0';
+    state.previous = null;
+    state.operator = null;
+    state.expression = '';
+    state.resetNext = false;
+    state.errored = false;
+    updateView();
+  }
+
+  function deleteLast(){
+    if(state.errored){ clearAll(); return; }
+    if(state.resetNext) return;
+    state.current = state.current.length > 1 ? state.current.slice(0, -1) : '0';
+    updateView();
+  }
+
+  function percent(){
+    if(state.errored) return;
+    const val = parseFloat(state.current);
+    if(isNaN(val)) return;
+    state.current = trimNumber(val / 100);
+    state.resetNext = false;
+    updateView();
+  }
+
+  document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(btn.dataset.digit !== undefined) inputDigit(btn.dataset.digit);
+      else if(btn.dataset.action === 'decimal') inputDigit('.');
+      else if(btn.dataset.action === 'operator') setOperator(btn.dataset.op);
+      else if(btn.dataset.action === 'equals') equals();
+      else if(btn.dataset.action === 'clear') clearAll();
+      else if(btn.dataset.action === 'delete') deleteLast();
+      else if(btn.dataset.action === 'percent') percent();
+    });
+  });
+
+  function flashKey(selector){
+    const btn = document.querySelector(selector);
+    if(!btn) return;
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 120);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if(/^[0-9]$/.test(key)){ inputDigit(key); flashKey(`[data-digit="${key}"]`); }
+    else if(key === '.'){ inputDigit('.'); flashKey('[data-action="decimal"]'); }
+    else if(key === '+'){ setOperator('+'); flashKey('[data-op="+"]'); }
+    else if(key === '-'){ setOperator('−'); flashKey('[data-op="−"]'); }
+    else if(key === '*'){ setOperator('×'); flashKey('[data-op="×"]'); }
+    else if(key === '/'){ e.preventDefault(); setOperator('÷'); flashKey('[data-op="÷"]'); }
+    else if(key === 'Enter' || key === '='){ e.preventDefault(); equals(); flashKey('[data-action="equals"]'); }
+    else if(key === 'Backspace'){ deleteLast(); flashKey('[data-action="delete"]'); }
+    else if(key === 'Escape'){ clearAll(); flashKey('[data-action="clear"]'); }
+    else if(key === '%'){ percent(); flashKey('[data-action="percent"]'); }
+  });
+
+  updateView();
+</script>
+
+</body>
+</html>

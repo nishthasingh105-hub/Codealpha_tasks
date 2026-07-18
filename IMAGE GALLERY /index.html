@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Image Gallery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gallery-container">
+        <!-- Header Section -->
+        <header class="gallery-header">
+            <h1>Image Gallery</h1>
+            <p>Explore our curated collection of stunning images</p>
+        </header>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="nature">Nature</button>
+            <button class="filter-btn" data-filter="architecture">Architecture</button>
+            <button class="filter-btn" data-filter="people">People</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid">
+            <!-- Nature Images -->
+            <div class="gallery-item" data-category="nature">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=500&fit=crop" alt="Mountain Landscape">
+                    <div class="image-overlay">
+                        <h3>Mountain Serenity</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="nature">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=500&fit=crop" alt="Forest Nature">
+                    <div class="image-overlay">
+                        <h3>Forest Whispers</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="nature">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=500&h=500&fit=crop" alt="Ocean Waves">
+                    <div class="image-overlay">
+                        <h3>Ocean Dreams</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="nature">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=500&fit=crop" alt="Nature Beauty">
+                    <div class="image-overlay">
+                        <h3>Natural Wonders</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Images -->
+            <div class="gallery-item" data-category="architecture">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=500&h=500&fit=crop" alt="Modern Architecture">
+                    <div class="image-overlay">
+                        <h3>Modern Design</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="architecture">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1479839672679-a464822900bb?w=500&h=500&fit=crop" alt="Urban Architecture">
+                    <div class="image-overlay">
+                        <h3>Urban Landscape</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="architecture">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1464207687429-7505649dae38?w=500&h=500&fit=crop" alt="Building Design">
+                    <div class="image-overlay">
+                        <h3>Architectural Marvel</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="architecture">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1495080715262-c72ec4c57808?w=500&h=500&fit=crop" alt="Contemporary Building">
+                    <div class="image-overlay">
+                        <h3>Contemporary Art</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- People Images -->
+            <div class="gallery-item" data-category="people">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop" alt="Portrait Person">
+                    <div class="image-overlay">
+                        <h3>Professional Portrait</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="people">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f70d504f0?w=500&h=500&fit=crop" alt="Happy Person">
+                    <div class="image-overlay">
+                        <h3>Joy & Happiness</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="people">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=500&h=500&fit=crop" alt="Professional Headshot">
+                    <div class="image-overlay">
+                        <h3>Business Portrait</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="people">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1524634126288-917f7ce83b9e?w=500&h=500&fit=crop" alt="Creative Person">
+                    <div class="image-overlay">
+                        <h3>Creative Mind</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox Modal -->
+        <div class="lightbox" id="lightbox">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-image" src="" alt="Gallery Image">
+            <div class="lightbox-caption"></div>
+            <button class="lightbox-prev">&#10094;</button>
+            <button class="lightbox-next">&#10095;</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
